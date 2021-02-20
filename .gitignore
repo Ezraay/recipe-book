@@ -1,0 +1,6 @@
+.env
+node_modules
+.vscode
+static/css/style.css
+
+build/
