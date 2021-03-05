@@ -15,7 +15,7 @@ app.set('view engine', 'ejs')
 
 app.use(Middleware)
 app.use('/profile', ProfileController)
-app.use('/recipe', RecipeController)
+app.use('/recipes', RecipeController)
 app.use(LoginController)
 app.use(HomeController)
 

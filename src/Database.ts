@@ -1,5 +1,5 @@
 import { mongoConnectionString, mongoDatabaseName } from './Constants'
-import { UserData } from '../models/User'
+import User, { UserData } from '../models/User'
 import Session, { SessionData } from '../models/Session'
 import Recipe, { RecipeData } from '../models/Recipe'
 import { Db, MongoClient } from 'mongodb'
@@ -27,14 +27,26 @@ export default class Database {
     Database.client.close()
   }
 
-  static createUser (userData: UserData) {}
-
-  static async createSession(session: Session) {
-    const collection = Database.db.collection('sessions')
+  static async createUser (user: User) {
+    const collection = Database.db.collection('users')
+    const { userID, username, email, logoURL, createdTime, name } = user
     await collection.insertOne({
-      sessionID: session.sessionID,
+      userID,
+      username,
+      email,
+      logoURL,
+      createdTime,
+      name
+    })
+  }
+
+  static async createSession (session: Session) {
+    const collection = Database.db.collection('sessions')
+    const { sessionID, lastTime } = session
+    await collection.insertOne({
       userID: session.user?.userID,
-      lastTime: session.lastTime
+      sessionID,
+      lastTime
     })
   }
 
@@ -64,40 +76,59 @@ export default class Database {
     return <SessionData>result
   }
 
-  static async getRecipes(searchTerm: string): Promise<RecipeData[]> {
+  static async getRecipes (searchTerm: string): Promise<RecipeData[]> {
     const collection = Database.db.collection('recipes')
     const result = await collection.find({ title: searchTerm }).toArray()
     return <Array<RecipeData>>result
   }
 
-  static async getRecipe(recipeID: string): Promise<RecipeData> {
+  static async getRecipe (recipeID: string): Promise<RecipeData> {
     const collection = Database.db.collection('recipes')
     const result = await collection.findOne({ recipeID })
     return <RecipeData>result
   }
-  
 
   static async updateSession (session: Session) {
     const collection = Database.db.collection('sessions')
+    const { sessionID, signingUp } = session
     await collection.updateOne(
       { sessionID: session.sessionID },
       {
         $set: {
-          sessionID: session.sessionID,
           lastTime: Date.now(),
-          userID: session.user?.userID
+          userID: session.user?.userID,
+          sessionID,
+          signingUp
         }
       }
     )
   }
 
-  static async deleteSession(session: Session) {
-    const collection = Database.db.collection('sessions')
-    await collection.deleteOne({sessionID: session.sessionID})
+  static async updateUser (user: User) {
+    const collection = Database.db.collection('users')
+    const { userID, username, name, email, logoURL, createdTime } = user
+    await collection.updateOne(
+      { userID },
+      {
+        $set: {
+          userID,
+          username,
+          name,
+          email,
+          logoURL,
+          createdTime
+        }
+      }
+    )
   }
 
-  static async deleteRecipe(recipe: Recipe) {
+  static async deleteSession (session: Session) {
     const collection = Database.db.collection('sessions')
-    await collection.deleteOne({sessionID: recipe.recipeID})
+    await collection.deleteOne({ sessionID: session.sessionID })
+  }
+
+  static async deleteRecipe (recipe: Recipe) {
+    const collection = Database.db.collection('sessions')
+    await collection.deleteOne({ sessionID: recipe.recipeID })
   }
 }

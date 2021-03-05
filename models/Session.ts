@@ -8,6 +8,7 @@ export interface SessionData {
   lastTime: number
 
   userID?: string
+  signingUp?: { [index: string]: any }
 }
 
 export default class Session {
@@ -16,6 +17,7 @@ export default class Session {
   lastTime: number
 
   user?: User
+  signingUp?: { [index: string]: any }
 
   static async get (sessionID: string = null) {
     const session = new Session()
@@ -28,7 +30,9 @@ export default class Session {
         session.sessionID = sessionData.sessionID
         session.lastTime = sessionData.lastTime
 
-        session.user = await Database.getUser(sessionData.userID)
+        if (sessionData.userID != undefined)
+          session.user = await User.get({ userID: sessionData.userID })
+        session.signingUp = sessionData.signingUp
       }
     } else {
       await session.create()

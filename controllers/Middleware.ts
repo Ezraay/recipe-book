@@ -4,6 +4,7 @@ import Session from '../models/Session'
 const router = Router()
 
 router.use(express.static('static'))
+router.use(express.urlencoded({extended: true}))
 router.use(require('cookie-parser')())
 router.use(async (req, res: any, next) => {
   res._render = res.render
@@ -27,6 +28,9 @@ router.use(async (req, res: any, next) => {
     }
   })()
 
+  if (session.user)
+    res.locals.user = session.user
+
 
   res.locals.session = session
   res.cookie('sessionID', session.sessionID)
@@ -35,3 +39,17 @@ router.use(async (req, res: any, next) => {
 })
 
 export default router
+
+export const authenticated = (_: any, res: any, next: () => void) => {
+  if (res.locals.user === undefined)
+    res.redirect('/login')
+  else
+    next()
+}
+
+export const unauthenticated = (_: any, res: any, next: () => void) => {
+  if (res.locals.user !== undefined)
+    res.redirect('/')
+  else
+    next()
+}

@@ -2,4 +2,50 @@
 
 body {
   font-family: 'PT Sans', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+}
+
+#login-main {
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+    margin-top: 40vh;
+
+  // #login-username {
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+  // }
+  #login-buttons {
+
+    button {
+      margin-bottom: 4px;
+      display: block;
+      align-items: center;
+      height: 50px;
+      
+      img {
+        display: inline-block;
+      }
+      
+      h4 {
+        display: inline-block;
+        vertical-align: middle;
+        margin: auto 10px;
+      }
+    }
+  }
+}
+
+.icon {
+  height: 90%;
+  object-fit: scale-down;
 }
