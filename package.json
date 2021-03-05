@@ -1,19 +1,24 @@
 {
   "scripts": {
     "dev": "nodemon",
+    "sass": "sass --watch static/css/style.scss static/css/style.css",
     "build": "tsc && sass static/css/style.scss static/css/style.css",
     "start": "node build/index.js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "google-auth-library": "^7.0.2",
+    "mongodb": "^3.6.4",
     "sass": "^1.32.8",
     "typescript": "^4.1.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
+    "@types/mongodb": "^3.6.8",
     "@types/uuid": "^8.3.0",
     "concurrently": "^6.0.0",
     "nodemon": "^2.0.7",
@@ -23,13 +28,12 @@
     "watch": [
       "src",
       "controllers",
-      "models",
-      "static/css"
+      "models"
     ],
     "ext": "ts,json,scss",
     "ignore": [
       "src/**/*.spec.ts"
     ],
-    "exec": "sass static/css/style.scss static/css/style.css && ts-node ./src/index.ts"
+    "exec": "ts-node ./src/index.ts"
   }
 }
