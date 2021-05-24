@@ -32,4 +32,8 @@ export default class Recipe {
   pictureURL: string
   steps: string[]
 
+  static async getByUser({ userID }: { userID: string }): Promise<Recipe[]> {
+    return []
+  }
+
 }

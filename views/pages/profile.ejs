@@ -1,0 +1,29 @@
+<title><%= profile.username %> - Recipe Book</title>
+
+<div class="profile h-100 d-flex flex-lg-row flex-column align-items-end">
+  <img src="<%= profile.logoURL %>" alt="@<%= profile.username %>'s' Logo">
+  <div class="profile-info h-100">
+    <h2><%= profile.name %></h2>
+    <hr class="mr-3">
+    <h4>@<%= profile.username %></h4>
+    <p id="profile-date"></p>
+    <div id="profile-recent-articles">
+      <% if (recipes.length === 0) { %>
+      <p class="no-recipes">This user has no recipes.</i></p>
+      <% } else { %>
+        <% const url = `/recipes/${profile.username}`
+          recipes.forEach(recipe => { %>
+        <a href="<%= `${url}/${recipe.url}` %>" class="profile-article">
+          <h6><%= recipe.title %></h6>
+          <p><%= new Date(recipe.datePosted).toLocaleDateString() %></p>
+        </a>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  const createdTime = parseInt('<%= profile.createdTime %>')
+  $('#profile-date').text(`Member since ${new Date(createdTime).toLocaleDateString()}`)
+</script>
